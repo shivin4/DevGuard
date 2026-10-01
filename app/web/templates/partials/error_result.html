@@ -1,0 +1,27 @@
+<div style="background: rgba(15, 23, 42, 0.9); border: 1px solid var(--primary); border-radius: 12px; padding: 1.25rem;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+        <span class="badge badge-danger" style="font-size: 0.85rem;">{{ explanation.exception_type }}</span>
+        <span style="font-size: 0.8rem; color: var(--text-muted);">Diagnosed by AI DevGuard</span>
+    </div>
+
+    <h4 style="font-size: 1.05rem; font-weight: 600; margin-bottom: 0.5rem; color: #f8fafc;">
+        {{ explanation.summary }}
+    </h4>
+
+    <div style="margin-bottom: 1rem;">
+        <h5 style="font-size: 0.85rem; color: var(--text-muted); uppercase; margin-bottom: 0.25rem;">Root Cause:</h5>
+        <p style="font-size: 0.9rem; line-height: 1.5; color: #cbd5e1;">{{ explanation.root_cause }}</p>
+    </div>
+
+    <div style="margin-bottom: 1rem;">
+        <h5 style="font-size: 0.85rem; color: var(--text-muted); uppercase; margin-bottom: 0.25rem;">Suggested Fix:</h5>
+        <p style="font-size: 0.9rem; line-height: 1.5; color: #6ee7b7;">{{ explanation.suggested_fix }}</p>
+    </div>
+
+    {% if explanation.fixed_code_snippet %}
+    <div>
+        <h5 style="font-size: 0.85rem; color: var(--text-muted); uppercase; margin-bottom: 0.25rem;">Code Fix:</h5>
+        <pre class="code-box"><code>{{ explanation.fixed_code_snippet }}</code></pre>
+    </div>
+    {% endif %}
+</div>

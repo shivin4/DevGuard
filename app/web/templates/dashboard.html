@@ -1,0 +1,138 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-label">Real Secrets Detected</div>
+        <div class="stat-value" style="color: var(--accent-red)">{{ real_secrets_count }}</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-label">False Positives</div>
+        <div class="stat-value" style="color: var(--accent-amber)">{{ false_positives_count }}</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-label">Errors Diagnosed</div>
+        <div class="stat-value" style="color: var(--primary)">{{ error_count }}</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-label">CI Analyses Run</div>
+        <div class="stat-value" style="color: var(--accent-green)">{{ ci_count }}</div>
+    </div>
+</div>
+
+<!-- Secret Scanner Card -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-title">
+            <span>🔑</span> Secret Scanner Findings
+        </div>
+        <div>
+            <form hx-post="/dashboard/scan" hx-target="#findings-table-body" hx-indicator="#scan-loader" style="display: inline-flex; gap: 0.5rem;">
+                <input type="text" name="path" value="." style="background: #090d16; border: 1px solid var(--border-color); color: white; padding: 0.4rem 0.8rem; border-radius: 6px; font-size: 0.85rem;" placeholder="Path to scan...">
+                <button type="submit" class="btn btn-sm">
+                    <span>Scan Path</span>
+                    <span id="scan-loader" class="htmx-indicator">⏳</span>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Rule Name</th>
+                <th>File & Line</th>
+                <th>Masked Secret</th>
+                <th>Entropy</th>
+                <th>Classification</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody id="findings-table-body">
+            {% for finding in findings %}
+                {% include "partials/finding_row.html" %}
+            {% else %}
+                <tr>
+                    <td colspan="6" style="text-align: center; color: var(--text-muted); padding: 2rem;">
+                        No secret findings logged yet. Click "Scan Path" above or run <code>devguard scan</code> in CLI.
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<!-- Error Explainer Card -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-title">
+            <span>⚡</span> Interactive Error Explainer
+        </div>
+    </div>
+
+    <form hx-post="/dashboard/explain" hx-target="#explain-result" hx-indicator="#explain-loader">
+        <textarea name="traceback_text" placeholder="Paste Python exception traceback here... (e.g., Traceback (most recent call last): File 'main.py', line 12... ZeroDivisionError: division by zero)"></textarea>
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <button type="submit" class="btn">
+                <span>Diagnose Exception</span>
+                <span id="explain-loader" class="htmx-indicator">⏳ Analyzing...</span>
+            </button>
+        </div>
+    </form>
+
+    <div id="explain-result" style="margin-top: 1.5rem;"></div>
+</div>
+
+<!-- RAG Codebase & Security Q&A Card -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-title">
+            <span>🤖</span> Ask DevGuard AI (LlamaIndex / LangChain RAG)
+        </div>
+    </div>
+
+    <form hx-post="/api/rag/query-htmx" hx-target="#rag-result" hx-swap="innerHTML" hx-on::after-request="this.reset()" hx-indicator="#rag-loader">
+        <div style="display: flex; gap: 0.8rem;">
+            <input type="text" name="query" placeholder="Ask anything about the codebase (e.g. How does secret masking work? What handles CI logs?)" style="flex: 1; background: #090d16; border: 1px solid var(--border-color); color: white; padding: 0.6rem 1rem; border-radius: 8px; font-size: 0.9rem;" required>
+            <button type="submit" class="btn">
+                <span>Ask RAG Bot</span>
+                <span id="rag-loader" class="htmx-indicator">⏳ Searching...</span>
+            </button>
+        </div>
+    </form>
+
+    <div id="rag-result"></div>
+</div>
+
+<!-- CI Failure Analyses Card -->
+<div class="card">
+    <div class="card-header">
+        <div class="card-title">
+            <span>⚙️</span> CI Workflow Failure Analyses
+        </div>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Repository</th>
+                <th>Workflow / Job</th>
+                <th>Category</th>
+                <th>Root Cause Analysis</th>
+                <th>Suggested Fix</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for analysis in ci_analyses %}
+                {% include "partials/ci_analysis_row.html" %}
+            {% else %}
+                <tr>
+                    <td colspan="5" style="text-align: center; color: var(--text-muted); padding: 2rem;">
+                        No GitHub Action pipeline failures logged yet. Webhook endpoint is listening at <code>/webhooks/github</code>.
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

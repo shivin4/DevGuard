@@ -1,0 +1,21 @@
+<tr>
+    <td style="font-weight: 600;">
+        {{ analysis.repository.name if analysis.repository else "Unknown Repo" }}
+        {% if analysis.pr_number %}
+            <span class="badge badge-info" style="margin-left: 0.4rem;">PR #{{ analysis.pr_number }}</span>
+        {% endif %}
+    </td>
+    <td>
+        <div>{{ analysis.workflow_name }}</div>
+        <div style="font-size: 0.8rem; color: var(--text-muted);">{{ analysis.job_name }}</div>
+    </td>
+    <td>
+        <span class="badge badge-warning">{{ analysis.failure_category }}</span>
+    </td>
+    <td style="max-width: 320px; font-size: 0.85rem; line-height: 1.4;">
+        {{ analysis.root_cause }}
+    </td>
+    <td style="max-width: 320px; font-size: 0.85rem; color: #6ee7b7; line-height: 1.4;">
+        {{ analysis.suggested_fix }}
+    </td>
+</tr>
