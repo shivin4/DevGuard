@@ -1,0 +1,31 @@
+id,workflow_name,job_name,expected_category,ground_truth_cause,sample_log_snippet
+1,CI,build,dependency_install,Missing package version in PyPI,ERROR: Could not find a version that satisfies the requirement requests==9.9.9 (from versions: none)
+2,Python CI,test,dependency_install,ModuleNotFoundError during execution,ModuleNotFoundError: No module named 'pydantic_settings'
+3,Deploy,setup,dependency_install,NPM package installation failure,npm ERR! code E404\nnpm ERR! 404 Not Found - GET https://registry.npmjs.org/non_existent_pkg
+4,Test Pipeline,pytest,failing_test,AssertionError in test suite,FAILED tests/test_api.py::test_login - AssertionError: 401 != 200
+5,Integration Tests,pytest,failing_test,Unhandled KeyError in test,FAILED tests/test_db.py::test_query - KeyError: 'user_id'
+6,Core CI,pytest,failing_test,Pytest zero division failure,FAILED tests/test_math.py::test_divide - ZeroDivisionError: division by zero
+7,Lint,ruff,lint_error,Unused import F401,app/main.py:4:1: F401 'os' imported but unused
+8,Format Check,black,lint_error,Black formatting check failed,would reformat app/config.py\nOh no! 💥 1 file would be reformatted.
+9,Code Quality,flake8,lint_error,Line length exceeded E501,app/utils.py:42:80: E501 line too long (110 > 88 characters)
+10,Docker Build,image,docker_build,Non-zero exit code in Dockerfile RUN step,The command '/bin/sh -c apt-get install -y missing_pkg' returned a non-zero code: 100
+11,Container CI,docker,docker_build,COPY failed file not found,COPY failed: stat var/www/html/app.py: no such file or directory
+12,Docker Deploy,build,docker_build,Invalid instruction in Dockerfile,Dockerfile:12 Unknown instruction: EXPOS
+13,Release,deploy,missing_secret,Missing GITHUB_TOKEN environment variable,Error: GITHUB_TOKEN environment variable not set or unauthorized
+14,Security Sync,push,missing_secret,Invalid API Key secret,Error: 401 Unauthorized - Invalid API Key provided in environment
+15,Database Migration,migrate,missing_secret,Database URL secret missing,KeyError: 'DATABASE_URL' environment variable is required
+16,E2E Tests,selenium,timeout,Job timed out after 30 minutes,The operation was canceled because the job timed out after 30 minutes.
+17,Load Test,locust,timeout,Command execution timeout,Command timed out after 600 seconds without output.
+18,Integration,pytest,failing_test,IndexError list index out of range,FAILED tests/test_cli.py::test_args - IndexError: list index out of range
+19,Dependencies,pip,dependency_install,Incompatible package dependencies,ERROR: Cannot install - package A requires B>=2.0 but B=1.0 is installed
+20,Linting,mypy,lint_error,Type mismatch error in mypy,app/main.py:12: error: Incompatible return type "str" (expected "int")
+21,Docker CI,build,docker_build,Base image pull rate limit,Error response from daemon: toomanyrequests: You have reached your pull rate limit
+22,Deploy,staging,missing_secret,AWS credentials missing,NoCredentialsError: Unable to locate credentials in environment or config
+23,Stress Test,bench,timeout,Runner execution timed out,Runner canceled due to runner timeout limit.
+24,Unit Tests,pytest,failing_test,AttributeError in test,FAILED tests/test_user.py::test_auth - AttributeError: 'NoneType' object has no attribute 'role'
+25,Setup,pip,dependency_install,Pip wheel build failure,ERROR: Failed building wheel for cryptography
+26,Style Check,eslint,lint_error,ESLint parsing error,src/index.js:15:5: Parsing error: Unexpected token
+27,Push Docker,publish,docker_build,Docker daemon connection error,Cannot connect to the Docker daemon at unix:///var/run/docker.sock
+28,Notification,slack,missing_secret,Missing Slack webhook secret,ValueError: SLACK_WEBHOOK_URL environment variable is empty
+29,Long Task,backup,timeout,Step execution exceeded timeout,Step timed out after 1200 seconds.
+30,Full CI,pytest,failing_test,TypeError in function call,FAILED tests/test_main.py::test_run - TypeError: run() missing 1 required positional argument
