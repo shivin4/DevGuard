@@ -1,0 +1,10 @@
+# DevGuard Pre-Commit Hook Configuration
+repos:
+  - repo: local
+    hooks:
+      - id: devguard-secret-scan
+        name: DevGuard Secret Leak Scanner
+        entry: python -m cli.main scan .
+        language: system
+        types: [text]
+        pass_filenames: false
