@@ -1,12 +1,23 @@
-devguard.db
-*.db
-*.sqlite3
-*.egg-info/
+# Environment files
+.env
+.env.*
+!.env.example
+*.env
+
+# Python bytecode & cache
 __pycache__/
+*.py[cod]
+*$py.class
 *.pyc
 .cache/
 .pytest_cache/
+
+# Databases
+devguard.db
+*.db
+*.sqlite3
+
+# Packaging & builds
+*.egg-info/
 dist/
 build/
-.env
-
